@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rustacious</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .logo {
+            width: 16rem;
+            height: 9rem;
+        }
+        .sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+    </style>
+</head>
+<body class="bg-gray-800 text-white min-h-screen flex flex-col p-6">
+
+    <script>
+        async function fetchDropdownValues() {
+            try {
+                const response = await fetch('http://127.0.0.1:8080/dropdown');
+                const data = await response.json();
+
+                const dropdown = document.getElementById('mySidenav');
+                dropdown.innerHTML = '' ;
+                let a_cancel = document.createElement('a');
+                a_cancel.setAttribute('href','javascript:void(0)');
+                a_cancel.classList.add('closebtn');
+                a_cancel.innerHTML="X";
+                a_cancel.addEventListener('click',closeNav);
+                dropdown.appendChild(a_cancel);
+                console.log(data);
+                data.forEach(item => {
+                    console.log(item.url);
+                    var a = document.createElement('a');
+                    a.setAttribute('href',item.url);
+                    a.innerHTML = item.title;
+                    dropdown.appendChild(a);
+                });
+            } catch (error) {
+                console.error('Error fetching dropdown values:', error);
+            }
+            openNav();
+        }
+
+        //document.addEventListener('DOMContentLoaded', fetchDropdownValues);
+        function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}
+
+    </script>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Clients</a>
+        <a href="#">Contact</a>
+      </div>
+    <span style="font-size:30px;cursor:pointer" onclick="fetchDropdownValues()">&#9776; History</span>
+    <div class="grid justify-items-center">
+    <img src="https://rustacean.net/more-crabby-things/dancing-ferris.gif" alt="Rust mascot" class="logo mb-4">
+    <h1 class="text-3x1 mb-6">Rust PasteBin</h1>
+    <h5 class="text-lg mb-10">A Minimal pastebin Type application that works, built with Rust!</h5>
+    <form class="w-full max-w-md bg-gray-700 rounded-lg p-6 shadow-md" action="/submit" method="post">
+        <p>Enter the title:-</p>
+        <textarea name="title" rows="1" class="w-full p-2 border border-gray-600 rounded-md mb-4 bg-black text-white"></textarea>
+        <p>Paste the copied data below:-</p>
+        <textarea name="content" rows="10" class="w-full p-2 border border-gray-600 rounded-md mb-4 bg-black text-white"></textarea>
+        <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">Submit</button>
+    </form>
+</div>
+</body>
+</html>
